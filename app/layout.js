@@ -1,7 +1,7 @@
 import { Fugaz_One, Open_Sans } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
 import { AuthProvider } from "@/context/AuthContext";
+import Header from "@/components/Header";
 
 const opensans = Open_Sans({ subsets: ["latin"] });
 const fugaz = Fugaz_One({ subsets: ["latin"], weight: ["400"] });
@@ -18,11 +18,7 @@ export default function RootLayout({ children }) {
         <body
           className={`w-full max-w-[1000px] mx-auto text-sm sm:text-base min-h-screen flex flex-col text-slate-700 ${opensans.className}`}
         >
-          <header className="p-4 sm:p-8 flex items-center justify-between gap-4">
-            <Link href={"/"}>
-              <h1 className={`text-base sm:text-lg textGradient  ${fugaz.className}`}>Broodl</h1>
-            </Link>
-          </header>
+          <Header />
           {children}
           <footer className="p-4 sm:p-8">
             <p className={`text-indigo-500 text-center ${fugaz.className}`}>Created with ❤</p>
