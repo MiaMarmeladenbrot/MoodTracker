@@ -1,7 +1,7 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { gradients } from "@/utils/gradients";
 import { baseRating } from "@/utils/ratings";
-import { demoData } from "@/utils/damoData";
 
 const months = {
   January: "Jan",
@@ -18,15 +18,28 @@ const months = {
   December: "Dec",
 };
 const monthsArr = Object.keys(months);
-const now = new Date();
 const dayList = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-export default function Calendar({ demo }) {
-  const year = 2024;
-  const month = "July";
-  const monthNow = new Date(year, Object.keys(months).indexOf(month), 1);
+export default function Calendar({ demo, completeData, handleSetMood }) {
+  console.log({ completeData });
+
+  const now = new Date();
+  const currMonth = now.getMonth();
+  const [selectedMonth, setSelectedMonth] = useState(monthsArr[currMonth]);
+
+  const [selectedYear, setSelectedYear] = useState(now.getFullYear());
+
+  const numericMonth = monthsArr.indexOf(selectedMonth);
+  const data = completeData?.[selectedYear]?.[numericMonth] || {};
+  console.log(data);
+
+  function handleIncrementMonth(val) {
+    // +1 or -1
+  }
+
+  const monthNow = new Date(selectedYear, monthsArr.indexOf(selectedMonth), 1);
   const firstDayOfMonth = monthNow.getDay();
-  const daysInMonth = new Date(year, Object.keys(months).indexOf(month) + 1, 0).getDate();
+  const daysInMonth = new Date(selectedYear, monthsArr.indexOf(selectedMonth) + 1, 0).getDate();
 
   const daysToDisplay = firstDayOfMonth + daysInMonth;
   const numRows = Math.floor(daysToDisplay / 7) + (daysToDisplay % 7 ? 1 : 0);
@@ -42,8 +55,8 @@ export default function Calendar({ demo }) {
 
     const color = demo
       ? gradients.indigo[baseRating[dayIndex]]
-      : dayIndex in demoData
-      ? gradients.indigo[demoData[dayIndex]]
+      : dayIndex in data
+      ? gradients.indigo[data[dayIndex]]
       : "white";
 
     return {
