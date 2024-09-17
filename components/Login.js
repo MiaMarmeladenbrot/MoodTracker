@@ -11,22 +11,26 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(false);
   const [authenticating, setAuthenticating] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { signup, login } = useAuth();
 
   async function handleSubmit() {
-    if (!email || !password || password.length < 6) return;
+    if (!email || !password || password.length < 6) {
+      setErrorMessage("Please give a valid email and a password longer than 5 characters.");
+      return;
+    }
+
     setAuthenticating(true);
     try {
       if (isRegister) {
-        console.log("Signing in new user");
         await signup(email, password);
       } else {
-        console.log("logging in existing user");
         await login(email, password);
       }
     } catch (error) {
       console.log(error.message);
+      setErrorMessage("Sorry, something went wrong there.");
     } finally {
       setAuthenticating(false);
     }
@@ -38,6 +42,7 @@ export default function Login() {
         {isRegister ? "Register" : "Log in"}
       </h3>
       <p>You&apos;re one step away!</p>
+      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
       <input
         value={email}
         type="text"

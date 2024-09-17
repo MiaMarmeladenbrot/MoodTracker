@@ -42,22 +42,14 @@ export function AuthProvider({ children }) {
         // set user to local context state
         setLoading(true);
         setCurrentUser(user);
-        if (!user) {
-          console.log("no user found");
-          return;
-        }
+        if (!user) return;
 
         // if user exists, fetch their data from firebase
-        console.log("fetching user data");
-
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
         let firebaseData = {};
         if (docSnap.exists()) {
-          console.log("found user data");
-
           firebaseData = docSnap.data();
-          console.log(firebaseData);
         }
         setUserDataObj(firebaseData);
       } catch (error) {

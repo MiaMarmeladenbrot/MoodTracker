@@ -10,6 +10,14 @@ import Login from "./Login";
 
 const fugaz = Fugaz_One({ subsets: ["latin"], weight: ["400"] });
 
+const moods = {
+  "&*@#$": "😡",
+  Sad: "😢",
+  Existing: "😶",
+  Good: "😊",
+  Elated: "😍",
+};
+
 export default function Dashboard() {
   const { currentUser, userDataObj, setUserDataObj, loading } = useAuth();
   const [moodData, setMoodData] = useState({});
@@ -32,7 +40,10 @@ export default function Dashboard() {
         }
       }
     }
-    return { num_days: totalNumOfDays, average_mood: (sumMoods / totalNumOfDays).toFixed(1) };
+    return {
+      your_streak: totalNumOfDays,
+      your_average_mood: (sumMoods / totalNumOfDays).toFixed(1),
+    };
   }
 
   const statuses = {
@@ -73,14 +84,6 @@ export default function Dashboard() {
       console.log("failed to set data", error.message);
     }
   }
-
-  const moods = {
-    "&*@#$": "😡",
-    Sad: "😢",
-    Existing: "😶",
-    Good: "😊",
-    Elated: "😍",
-  };
 
   if (loading) {
     return <Loading />;
