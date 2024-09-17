@@ -31,30 +31,39 @@ export default function Calendar({ demo }) {
   const daysToDisplay = firstDayOfMonth + daysInMonth;
   const numRows = Math.floor(daysToDisplay / 7) + (daysToDisplay % 7 ? 1 : 0);
 
+  const getDayInfo = (dayIndex, dayOfWeekIndex, rowIndex) => {
+    const isToday = dayIndex === now.getDate();
+    const dayDisplay =
+      dayIndex > daysInMonth
+        ? false
+        : rowIndex === 0 && dayOfWeekIndex < firstDayOfMonth
+        ? false
+        : true;
+
+    const color = demo
+      ? gradients.indigo[baseRating[dayIndex]]
+      : dayIndex in demoData
+      ? gradients.indigo[demoData[dayIndex]]
+      : "white";
+
+    return {
+      isToday,
+      dayDisplay,
+      color,
+    };
+  };
+
   return (
     <div className="flex flex-col overflow-hidden gap-1 py-4 sm:py-6 md:py-10">
       {[...Array(numRows).keys()].map((row, rowIndex) => (
         <div key={rowIndex} className="grid grid-cols-7 gap-1">
           {dayList.map((dayOfWeek, dayOfWeekIndex) => {
             let dayIndex = rowIndex * 7 + dayOfWeekIndex - (firstDayOfMonth - 1);
-            let dayDisplay =
-              dayIndex > daysInMonth
-                ? false
-                : row === 0 && dayOfWeekIndex < firstDayOfMonth
-                ? false
-                : true;
-
-            let isToday = dayIndex === now.getDate();
+            const { isToday, dayDisplay, color } = getDayInfo(dayIndex, dayOfWeekIndex, rowIndex);
 
             if (!dayDisplay) {
               return <div className="bg-white" key={dayOfWeekIndex} />;
             }
-
-            let color = demo
-              ? gradients.indigo[baseRating[dayIndex]]
-              : dayIndex in demoData
-              ? gradients.indigo[demoData[dayIndex]]
-              : "white";
 
             return (
               <div
